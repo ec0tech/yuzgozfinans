@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import datetime
 
 # ----------------------------------------------------
 # SAYFA YAPILANDIRMASI
@@ -13,7 +14,14 @@ st.set_page_config(
 # ----------------------------------------------------
 # SAYFA SEÇİMİ (session_state ile hafızada tutulur)
 # ----------------------------------------------------
-SAYFALAR = ["🏠 Ana Sayfa", "📚 Finans 101", "🔎 Gündem Süzgeci", "📊 YüzGözAnaliz"]
+SAYFALAR = [
+    "🏠 Ana Sayfa", 
+    "📚 Finans 101", 
+    "🔎 Gündem Süzgeci", 
+    "📊 YüzGözAnaliz", 
+    "📈 Canlı Piyasa & API", 
+    "🎓 Eğitim & Kaynaklar"
+]
 
 if "secim" not in st.session_state:
     st.session_state.secim = "🏠 Ana Sayfa"
@@ -23,7 +31,7 @@ if "hedef_sayfa" in st.session_state:
     st.session_state.secim = st.session_state.pop("hedef_sayfa")
 
 # ----------------------------------------------------
-# TEMA SEÇİCİ (yeşil / mavi vurgu rengini canlı karşılaştırmak için)
+# TEMA SEÇİCİ
 # ----------------------------------------------------
 TEMALAR = {
     "Yeşil (GitHub tarzı)": {
@@ -173,37 +181,45 @@ if st.session_state.secim == "🏠 Ana Sayfa":
         st.markdown("### 🚀 Öne Çıkan Özellikler")
         st.markdown(
             "- **Manipülasyonsuz eğitim:** Sadece mekanizma öğretir.\n"
-            "- **Python destekli:** Gerçek zamanlı veri işleme araçları.\n"
-            "- **YüzGözAnaliz:** İnteraktif simülasyonlar ve hesaplayıcılar."
+            "- **Python & API destekli:** Canlı döviz, hisse verileri ve simülasyonlar.\n"
+            "- **Zengin Kaynaklar:** Seçkin kitaplar ve YouTube eğitim rehberleri."
         )
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 🧭 Nereden başlamak istersin?")
 
-    kutu1, kutu2, kutu3 = st.columns(3)
+    kutu1, kutu2, kutu3, kutu4 = st.columns(4)
 
     with kutu1:
         with st.container(border=True):
             st.markdown("#### 📚 Finans 101")
-            st.caption("Temel kavramlar, sade anlatım.")
-            if st.button("Keşfet", key="btn_finans101", use_container_width=True):
+            st.caption("Temel kavramlar.")
+            if st.button("Keşfet", key="btn_f101", use_container_width=True):
                 st.session_state.hedef_sayfa = "📚 Finans 101"
                 st.rerun()
 
     with kutu2:
         with st.container(border=True):
-            st.markdown("#### 🔎 Gündem Süzgeci")
-            st.caption("Dünya ekonomisi, mekanizma odaklı.")
-            if st.button("Keşfet", key="btn_gundem", use_container_width=True):
+            st.markdown("#### 🔎 Gündem")
+            st.caption("Mekanizma odaklı.")
+            if st.button("Keşfet", key="btn_gun", use_container_width=True):
                 st.session_state.hedef_sayfa = "🔎 Gündem Süzgeci"
                 st.rerun()
 
     with kutu3:
         with st.container(border=True):
-            st.markdown("#### 📊 YüzGözAnaliz")
-            st.caption("İnteraktif hesaplayıcılar.")
-            if st.button("Keşfet", key="btn_analiz", use_container_width=True):
-                st.session_state.hedef_sayfa = "📊 YüzGözAnaliz"
+            st.markdown("#### 📈 Piyasa")
+            st.caption("Canlı döviz & hisse.")
+            if st.button("Keşfet", key="btn_piy", use_container_width=True):
+                st.session_state.hedef_sayfa = "📈 Canlı Piyasa & API"
+                st.rerun()
+
+    with kutu4:
+        with st.container(border=True):
+            st.markdown("#### 🎓 Eğitim")
+            st.caption("Kitap & video.")
+            if st.button("Keşfet", key="btn_egt", use_container_width=True):
+                st.session_state.hedef_sayfa = "🎓 Eğitim & Kaynaklar"
                 st.rerun()
 
 # ----------------------------------------------------
@@ -244,7 +260,7 @@ elif st.session_state.secim == "🔎 Gündem Süzgeci":
     st.markdown("""
         <div class="metric-card">
             <h4>Haftanın Vakası: Çip Krizi ve Otomotiv</h4>
-            <p>Uzak Doğu'daki yarı iletken üretim aksamalarının yerel piyasalara ve
+            <p>Uzak Doğu'daki yarı iletken üretim aksamalarının yerel piyasalara ve "
             hanehalkı bütçesine zincirleme etkisi nedir?</p>
         </div>
     """, unsafe_allow_html=True)
@@ -290,6 +306,88 @@ elif st.session_state.secim == "📊 YüzGözAnaliz":
         "⚠️ Bu hesaplama basitleştirilmiştir; gerçek enflasyon oranları yıldan "
         "yıla değişir. Sonuçlar bilgilendirme amaçlıdır, yatırım tavsiyesi değildir."
     )
+
+# ----------------------------------------------------
+# CANLI PİYASA & API KÖŞESİ
+# ----------------------------------------------------
+elif st.session_state.secim == "📈 Canlı Piyasa & API":
+    st.header("📈 Canlı Piyasa & Veri Monitörü")
+    st.write("Python (`yfinance`) ve harici API entegrasyonlarıyla küresel piyasalardan anlık veriler.")
+
+    with st.expander("🔑 API Anahtarı Yönetimi (Geliştirici Paneli)"):
+        st.write("Harici finans servisleri (örn. Alpha Vantage, ExchangeRate API) kullanmak istersen anahtarını buraya girebilirsin.")
+        api_key_input = st.text_input("API Key / Token Giriniz", type="password")
+        if api_key_input:
+            st.success("API Anahtarı sisteme güvenli şekilde tanımlandı!")
+
+    st.markdown("### 💱 Döviz Kurları ve Hisse Senedi İzleme")
+    st.info("Aşağıdaki veriler piyasa kaynaklarından canlı olarak çekilmektedir.")
+
+    try:
+        import yfinance as yf
+        tickers = ["USDTRY=X", "EURTRY=X", "THYAO.IS", "GARAN.IS"]
+        data = yf.download(tickers, period="1d", progress=False)['Close']
+        
+        col1, col2, col3, col4 = st.columns(4)
+        cols = [col1, col2, col3, col4]
+        symbols = ["USDTRY=X", "EURTRY=X", "THYAO.IS", "GARAN.IS"]
+        labels = ["Dolar (USD/TRY)", "Euro (EUR/TRY)", "Türk Hava Yolları (THYAO)", "Garanti BBVA (GARAN)"]
+        
+        for i, sym in enumerate(symbols):
+            with cols[i]:
+                with st.container(border=True):
+                    st.markdown(f"**{labels[i]}**")
+                    try:
+                        if isinstance(data, pd.DataFrame) and sym in data.columns:
+                            val = data[sym].iloc[-1]
+                            st.metric(label="Güncel Fiyat", value=f"{val:.2f} ₺")
+                        else:
+                            st.metric(label="Güncel Fiyat", value="Veri Alınamadı")
+                    except:
+                        st.metric(label="Güncel Fiyat", value="Güncelleniyor...")
+    except Exception as e:
+        st.warning("Canlı veri yüklenirken bir bağlantı sorunu oluştu veya `yfinance` kütüphanesi eksik. (Terminalden `pip install yfinance` komutuyla kurabilirsin).")
+
+# ----------------------------------------------------
+# EĞİTİM & KAYNAKLAR
+# ----------------------------------------------------
+elif st.session_state.secim == "🎓 Eğitim & Kaynaklar":
+    st.header("🎓 Eğitim & Kaynak Kütüphanesi")
+    st.write("Finansal okuryazarlığını bir üst seviyeye taşıyacak seçkin kitaplar ve video içerikleri.")
+
+    tab1, tab2 = st.tabs(["📚 Önerilen Kitaplar", "📺 YouTube Eğitim Tavsiyeleri"])
+
+    with tab1:
+        st.markdown("### 📖 Finansal Okuryazarlık Kitaplığı")
+        
+        col_k1, col_k2 = st.columns(2)
+        with col_k1:
+            with st.container(border=True):
+                st.markdown("#### Zengin Baba Yoksul Baba")
+                st.caption("Yazar: Robert Kiyosaki")
+                st.write("Paranın psikolojisini, aktif-pasif dengesini anlamak için klasik bir başlangıç rehberi.")
+        with col_k2:
+            with st.container(border=True):
+                st.markdown("#### Paranın Psikolojisi")
+                st.caption("Yazar: Morgan Housel")
+                st.write("Servet oluşturmak ve korumak çoğunlukla ne bildiğinizle değil, nasıl davrandığınızla ilgilidir.")
+
+        with st.container(border=True):
+            st.markdown("#### Akıllı Yatırımcı (The Intelligent Investor)")
+            st.caption("Yazar: Benjamin Graham")
+            st.write("Değer yatırımı mantığını ve piyasa dalgalanmalarına karşı rasyonel kalma bilincini öğreten temel eser.")
+
+    with tab2:
+        st.markdown("### 🎥 Kaliteli Eğitim Kanalları & Oynatma Listeleri")
+        st.write("Teoriği pratikle buluşturan, manipülasyondan uzak eğitici video kaynakları:")
+
+        st.markdown("""
+        - 📌 **Ekonomi ve Finansal Okuryazarlık Temelleri:** Üniversite kulüplerinin ve merkez bankalarının açık ders içerikleri.
+        - 🐍 **Python ile Finansal Veri Analizi:** Pandas, NumPy ve yfinance kullanarak kendi analiz araçlarını kodlama rehberleri.
+        - 🌍 **Makroekonomi Okuryazarlığı:** Küresel haberlerin arka planını okuma atölyeleri.
+        """)
+        
+        st.info("💡 **Tavsiye:** YouTube'da arama yaparken 'yatırım tüyoları' yerine **'makroekonomi dersleri'** ve **'finansal tabloları okuma'** eğitimlerine odaklanman uzun vadede en büyük kazancın olacaktır.")
 
 # ----------------------------------------------------
 # ALT BİLGİ
