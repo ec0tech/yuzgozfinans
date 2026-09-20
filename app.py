@@ -98,16 +98,18 @@ st.markdown(f"""
         margin-bottom: 16px;
     }}
     .hero-baslik {{
-        font-size: 40px;
+        font-size: 52px;
         font-weight: 700;
         color: #f0f6fc;
-        margin: 0 0 8px;
+        margin: 0 0 12px;
+        text-align: center;
     }}
     .hero-alt {{
-        font-size: 16px;
+        font-size: 17px;
         color: #9198a1;
         max-width: 560px;
         margin: 0 auto;
+        text-align: center;
     }}
 
     h1, h2, h3 {{
