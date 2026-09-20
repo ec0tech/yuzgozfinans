@@ -182,7 +182,7 @@ if st.session_state.secim == "🏠 Ana Sayfa":
         st.markdown("### 🚀 Öne Çıkan Özellikler")
         st.markdown(
             "- **Manipülasyonsuz eğitim:** Sadece mekanizma öğretir.\n"
-            "- **Python destekli:** `yfinance` ile canlı döviz ve hisse verileri.\n"
+            "- **Python destekli:** `yfinance` ile canlı döviz ve altın/gümüş verileri.\n"
             "- **Zengin Kaynaklar:** Seçkin kitaplar ve YouTube eğitim rehberleri."
         )
 
@@ -210,7 +210,7 @@ if st.session_state.secim == "🏠 Ana Sayfa":
     with kutu3:
         with st.container(border=True):
             st.markdown("#### 📈 Piyasa")
-            st.caption("Canlı döviz & hisse.")
+            st.caption("Canlı döviz & maden.")
             if st.button("Keşfet", key="btn_piy", use_container_width=True):
                 st.session_state.hedef_sayfa = "📈 Canlı Piyasa"
                 st.rerun()
@@ -313,20 +313,19 @@ elif st.session_state.secim == "📊 YüzGözAnaliz":
 # ----------------------------------------------------
 elif st.session_state.secim == "📈 Canlı Piyasa":
     st.header("📈 Canlı Piyasa Monitörü")
-    st.write("Python (`yfinance`) kütüphanesiyle küresel piyasalardan ve borsadan anlık veriler.")
+    st.write("Python (`yfinance`) kütüphanesiyle küresel döviz ve kıymetli madenlerden anlık veriler.")
 
-    st.markdown("### 💱 Döviz Kurları ve Hisse Senedi İzleme")
+    st.markdown("### 💱 Döviz Kurları ve Kıymetli Madenler")
     st.info("Aşağıdaki veriler Yahoo Finance üzerinden canlı olarak çekilmektedir.")
 
     try:
-        import yfinance as yf
-        tickers = ["USDTRY=X", "EURTRY=X", "THYAO.IS", "GARAN.IS"]
+        tickers = ["USDTRY=X", "EURTRY=X", "GC=F", "SI=F"]
         data = yf.download(tickers, period="1d", progress=False)['Close']
         
         col1, col2, col3, col4 = st.columns(4)
         cols = [col1, col2, col3, col4]
-        symbols = ["USDTRY=X", "EURTRY=X", "THYAO.IS", "GARAN.IS"]
-        labels = ["Dolar (USD/TRY)", "Euro (EUR/TRY)", "Türk Hava Yolları (THYAO)", "Garanti BBVA (GARAN)"]
+        symbols = ["USDTRY=X", "EURTRY=X", "GC=F", "SI=F"]
+        labels = ["Dolar (USD/TRY)", "Euro (EUR/TRY)", "Ons Altın (USD)", "Gümüş (USD)"]
         
         for i, sym in enumerate(symbols):
             with cols[i]:
@@ -335,13 +334,13 @@ elif st.session_state.secim == "📈 Canlı Piyasa":
                     try:
                         if isinstance(data, pd.DataFrame) and sym in data.columns:
                             val = data[sym].iloc[-1]
-                            st.metric(label="Güncel Fiyat", value=f"{val:.2f} ₺")
+                            st.metric(label="Güncel Fiyat", value=f"{val:,.2f}")
                         else:
                             st.metric(label="Güncel Fiyat", value="Veri Alınamadı")
                     except:
                         st.metric(label="Güncel Fiyat", value="Güncelleniyor...")
     except Exception as e:
-        st.warning("Canlı veri yüklenirken bir bağlantı sorunu oluştu veya `yfinance` kütüphanesi eksik. (Terminalden `pip install yfinance` komutuyla kurabilirsin).")
+        st.warning("Canlı veri yüklenirken bir bağlantı sorunu oluştu veya `yfinance` kütüphanesi eksik.")
 
 # ----------------------------------------------------
 # EĞİTİM & KAYNAKLAR
