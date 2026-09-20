@@ -2,19 +2,48 @@ import streamlit as st
 import pandas as pd
 
 # ----------------------------------------------------
-# SAYFA AYARLARI
+# SAYFA YAPILANDIRMASI
 # ----------------------------------------------------
 st.set_page_config(
     page_title="YüzGözFinans",
     page_icon="👁️",
-    layout="wide",
+    layout="wide"
 )
 
 # ----------------------------------------------------
-# ÜST BAŞLIK
+# ÖZEL CSS
+# ----------------------------------------------------
+st.markdown("""
+    <style>
+    .stApp {
+        background-color: #0E1117;
+    }
+    .metric-card {
+        background-color: #1E2229;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #2D3748;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 12px;
+    }
+    .metric-card h4 {
+        margin-top: 0;
+    }
+    h1, h2, h3 {
+        color: #FAFAFA !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# ----------------------------------------------------
+# ÜST BANNER / BAŞLIK ALANI
 # ----------------------------------------------------
 st.title("👁️ YüzGözFinans")
-st.caption("Finansal okuryazarlık için gözünüzü açık tutun.")
+st.markdown("##### *Parana YüzGöz Ol*")
+st.markdown(
+    "*Yatırım tavsiyesi değil; dünya gündeminin mekanizması, finansal okuryazarlık "
+    "ve veri analitiği.*"
+)
 
 st.info(
     "📌 **Bu site gelişim aşamasındadır.** Şu an bir başlangıç (MVP) sürümünü "
@@ -23,132 +52,129 @@ st.info(
     "amaç yalnızca eğitim ve farkındalıktır."
 )
 
+st.markdown("---")
+
 # ----------------------------------------------------
-# SEKMELER
+# YAN MENÜ (SIDEBAR)
 # ----------------------------------------------------
-tab1, tab2, tab3 = st.tabs(["📘 Finans 101", "🧮 Python Köşesi", "🌍 Gündem Analizleri"])
+st.sidebar.image("https://img.icons8.com/fluency/96/stocks-growth.png", width=80)
+st.sidebar.title("Navigasyon")
+secim = st.sidebar.radio(
+    "Gitmek istediğin alanı seç:",
+    ["🏠 Ana Sayfa", "📚 Finans 101", "🔎 Gündem Süzgeci", "📊 YüzGözAnaliz"]
+)
 
-# ==========================================================
-# TAB 1 - FİNANS 101
-# ==========================================================
-with tab1:
-    st.header("Finans 101: Temel Kavramlar")
-    st.write("Karmaşık finans terimlerini sade bir dille anlatıyoruz.")
+# ----------------------------------------------------
+# ANA SAYFA
+# ----------------------------------------------------
+if secim == "🏠 Ana Sayfa":
+    col1, col2 = st.columns(2)
 
-    with st.expander("💡 Enflasyon Nedir?", expanded=True):
-        st.markdown("""
-Enflasyon, bir ekonomideki mal ve hizmetlerin genel fiyat düzeyinin zaman içinde
-artması ve buna bağlı olarak paranın satın alma gücünün azalmasıdır.
+    with col1:
+        st.markdown("### 🎯 Projenin Amacı")
+        st.info(
+            "YüzGözFinans; karmaşık küresel ekonomik olayları arkasındaki "
+            "neden-sonuç ilişkileriyle okuyucuya aktaran, tüyolardan arındırılmış "
+            "saf bir finansal farkındalık ve eğitim platformudur."
+        )
+    with col2:
+        st.markdown("### 🚀 Öne Çıkan Özellikler")
+        st.markdown(
+            "- **Manipülasyonsuz eğitim:** Sadece mekanizma öğretir.\n"
+            "- **Python destekli:** Gerçek zamanlı veri işleme araçları.\n"
+            "- **YüzGözAnaliz:** İnteraktif simülasyonlar ve hesaplayıcılar."
+        )
 
-**Basit bir örnekle düşünelim:**
-Geçen yıl 100 TL ile alabildiğiniz bir sepet market ürünü, bu yıl aynı sepeti
-almak için 130 TL gerektiriyorsa, yıllık enflasyon oranı yaklaşık %30 demektir.
-Aynı 100 TL'niz artık daha az ürün alabiliyor — yani paranızın değeri "eridi".
+# ----------------------------------------------------
+# FİNANS 101
+# ----------------------------------------------------
+elif secim == "📚 Finans 101":
+    st.header("📚 Finans 101: Temel Kavramlar")
+    st.write("Ekonominin temel taşlarını en sade, anlaşılır dille keşfet.")
 
-**Neden önemli?**
-- Elinizdeki nakit, hiçbir yere yatırılmadığında enflasyon karşısında zamanla
-  değer kaybeder.
-- Maaş artışlarının enflasyonun altında kalması, reel olarak daha fakirleşmek
-  anlamına gelebilir.
-- Merkez bankaları, enflasyonu kontrol altında tutmak için faiz oranlarını
-  kullanır (bu konuyu ayrı bir yazıda ele alacağız).
+    with st.expander("Enflasyon Nedir? Aslında Paramız Neden Erir?", expanded=True):
+        st.write(
+            "Enflasyon, genel fiyat düzeyinin sürekli artması durumudur. "
+            "Satın alma gücünün azalması demektir. Geçen yıl 100 TL ile "
+            "aldığınız bir sepet ürün, bu yıl 130 TL'ye çıkıyorsa, paranızın "
+            "değeri o oranda erimiş demektir."
+        )
 
-👉 Aşağıdaki **Python Köşesi** sekmesinde, kendi paranızın enflasyon karşısında
-ne kadar eridiğini hesaplayabilirsiniz.
-        """)
-
-    with st.expander("📈 Bileşik Getiri (Faiz) Nedir?"):
-        st.markdown("""
-Bileşik getiri, kazandığınız getirinin de tekrar getiri kazanmaya başlaması
-prensibidir. Basitçe "paranın parayı kazanması" diyebiliriz.
-
-**Basit bir örnekle düşünelim:**
-100 TL'nizi yıllık %10 getiri sağlayan bir yatırıma koyduğunuzu varsayalım.
-
-- 1. yıl sonunda: 100 TL → 110 TL
-- 2. yıl sonunda: 110 TL üzerinden %10 kazanırsınız → 121 TL
-- 3. yıl sonunda: 121 TL üzerinden %10 kazanırsınız → 133,1 TL
-
-Dikkat ederseniz her yıl kazandığınız miktar biraz daha artıyor, çünkü artık
-sadece başlangıç sermayeniz değil, önceki kazancınız da getiri üretiyor.
-
-**Neden önemli?**
-- Zaman, bileşik getirinin en güçlü bileşenidir — ne kadar erken başlarsanız
-  sonuç o kadar büyür.
-- Bu mantık hem birikimler hem de borçlar (örneğin kredi kartı faizi) için
-  aynı şekilde işler; borç tarafında ise aleyhinize çalışır.
-
-*Not: Bu anlatım eğitim amaçlıdır, belirli bir yatırım aracını önermez.*
-        """)
+    with st.expander("Bileşik Getiri Nedir?"):
+        st.write(
+            "Bileşik getiri, kazandığınız getirinin de tekrar getiri üretmeye "
+            "başlaması prensibidir. Zaman geçtikçe küçük bir başlangıç tutarı "
+            "bile katlanarak büyüyebilir. Bu mantık borçlar için de aynı şekilde "
+            "işler, bu yüzden erken ödeme her zaman avantajlıdır."
+        )
 
     st.caption("🔜 Bu bölüme yakında yeni kavramlar eklenecek: faiz oranları, bütçe yönetimi, risk ve çeşitlendirme...")
 
-# ==========================================================
-# TAB 2 - PYTHON KÖŞESİ (MINI ARAÇ)
-# ==========================================================
-with tab2:
-    st.header("🧮 Enflasyon Karşısında Paranızın Erime Hesaplayıcısı")
+# ----------------------------------------------------
+# GÜNDEM SÜZGECİ
+# ----------------------------------------------------
+elif secim == "🔎 Gündem Süzgeci":
+    st.header("🔎 Gündem Süzgeci: Dünya ve Ekonomi")
     st.write(
-        "Elinizdeki parayı yatırıma koymadan bir kenarda tutarsanız, "
-        "enflasyon karşısında satın alma gücünüzün nasıl azaldığını görün."
+        "Küresel haberleri olduğu gibi değil, mekanizmasını süzerek aktarıyoruz — "
+        "tavsiye vermeden, sadece anlatarak."
     )
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        amount = st.number_input("Başlangıç Tutarı (TL)", min_value=0.0, value=10000.0, step=100.0)
-    with col2:
-        inflation_rate = st.number_input("Yıllık Ortalama Enflasyon Oranı (%)", min_value=0.0, value=35.0, step=0.5)
-    with col3:
-        years = st.slider("Süre (Yıl)", min_value=1, max_value=20, value=5)
+    st.markdown("""
+        <div class="metric-card">
+            <h4>Haftanın Vakası: Çip Krizi ve Otomotiv</h4>
+            <p>Uzak Doğu'daki yarı iletken üretim aksamalarının yerel piyasalara ve
+            hanehalkı bütçesine zincirleme etkisi nedir?</p>
+        </div>
+    """, unsafe_allow_html=True)
 
-    if st.button("Hesapla", type="primary"):
-        data = []
-        current_value = amount
-        for year in range(0, years + 1):
-            real_value = amount / ((1 + inflation_rate / 100) ** year)
-            data.append({"Yıl": year, "Reel Satın Alma Gücü (TL)": round(real_value, 2)})
+    st.warning("✍️ Çok yakında yeni süzülmüş analizler burada olacak — takipte kalın!")
 
-        df = pd.DataFrame(data)
+# ----------------------------------------------------
+# YÜZGÖZANALİZ
+# ----------------------------------------------------
+elif secim == "📊 YüzGözAnaliz":
+    st.header("📊 YüzGözAnaliz: Simülasyon Merkezi")
+    st.write("Python altyapısıyla güçlendirilmiş interaktif karar destek araçları.")
 
-        final_value = df.iloc[-1]["Reel Satın Alma Gücü (TL)"]
-        loss_amount = amount - final_value
-        loss_percent = (loss_amount / amount) * 100 if amount > 0 else 0
+    col_a, col_b, col_c = st.columns(3)
+    with col_a:
+        enflasyon = st.slider("Yıllık Tahmini Enflasyon Oranı (%)", 10, 100, 40)
+    with col_b:
+        para = st.number_input("Başlangıç Tutarı (TL)", value=10000)
+    with col_c:
+        yil = st.slider("Süre (Yıl)", 1, 10, 5)
 
-        st.subheader("Sonuç")
-        c1, c2, c3 = st.columns(3)
-        c1.metric("Başlangıç Değeri", f"{amount:,.0f} TL")
-        c2.metric(f"{years} Yıl Sonraki Reel Değer", f"{final_value:,.0f} TL", delta=f"-{loss_amount:,.0f} TL")
-        c3.metric("Satın Alma Gücü Kaybı", f"%{loss_percent:.1f}")
+    veri = []
+    for y in range(0, yil + 1):
+        deger = para / ((1 + enflasyon / 100) ** y)
+        veri.append({"Yıl": y, "Reel Alım Gücü (TL)": round(deger, 2)})
 
-        st.line_chart(df.set_index("Yıl"))
+    df = pd.DataFrame(veri)
+    son_deger = df.iloc[-1]["Reel Alım Gücü (TL)"]
+    kayip_yuzde = ((para - son_deger) / para) * 100 if para > 0 else 0
 
-        st.caption(
-            "⚠️ Bu hesaplama basitleştirilmiştir; gerçek enflasyon oranları yıldan yıla "
-            "değişir ve burada sabit kabul edilmiştir. Sonuçlar bilgilendirme amaçlıdır, "
-            "yatırım tavsiyesi değildir."
-        )
-
-    st.caption("🔜 Bu köşeye yakında yeni interaktif araçlar eklenecek: bileşik getiri hesaplayıcı, temel terimler sözlüğü ve daha fazlası...")
-
-# ==========================================================
-# TAB 3 - GÜNDEM ANALİZLERİ (PLACEHOLDER)
-# ==========================================================
-with tab3:
-    st.header("🌍 Gündem Analizleri")
-    st.write(
-        "Bu bölüm henüz yapım aşamasında. Yakında burada, dünya ekonomisindeki "
-        "güncel gelişmelerin (merkez bankası kararları, enerji krizleri, "
-        "tedarik zinciri sorunları gibi) **tavsiye vermeden**, sadece "
-        "mekanizmasını anlatan haftalık analizler paylaşılacak."
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.metric(
+        label=f"Enflasyon Karşısında {yil} Yıl Sonraki Alım Gücü",
+        value=f"{son_deger:,.2f} TL",
+        delta=f"-%{kayip_yuzde:.1f} Kayıp",
+        delta_color="inverse"
     )
-    st.warning("✍️ Çok yakında ilk analiz yazımız burada olacak — takipte kalın!")
+
+    st.line_chart(df.set_index("Yıl"))
+
+    st.caption(
+        "⚠️ Bu hesaplama basitleştirilmiştir; gerçek enflasyon oranları yıldan "
+        "yıla değişir. Sonuçlar bilgilendirme amaçlıdır, yatırım tavsiyesi değildir."
+    )
 
 # ----------------------------------------------------
 # ALT BİLGİ
 # ----------------------------------------------------
-st.divider()
-st.caption(
-    "YüzGözFinans — Akbank AI Business School 'Introduction to Python' sertifikası "
-    "kapsamında geliştirilen bir portfolyo projesidir. İçerikler zamanla genişletilecektir. "
-    "Hiçbir içerik yatırım tavsiyesi teşkil etmez."
+st.markdown("---")
+st.markdown(
+    "<p style='text-align: center; color: gray;'>YüzGözFinans | Eğitim Amaçlı "
+    "Portfolyo Projesidir 🚀</p>",
+    unsafe_allow_html=True
 )
