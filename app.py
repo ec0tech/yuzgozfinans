@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import datetime
+import yfinance as yf
 
 # ----------------------------------------------------
 # SAYFA YAPILANDIRMASI
@@ -19,7 +20,7 @@ SAYFALAR = [
     "📚 Finans 101", 
     "🔎 Gündem Süzgeci", 
     "📊 YüzGözAnaliz", 
-    "📈 Canlı Piyasa & API", 
+    "📈 Canlı Piyasa", 
     "🎓 Eğitim & Kaynaklar"
 ]
 
@@ -181,7 +182,7 @@ if st.session_state.secim == "🏠 Ana Sayfa":
         st.markdown("### 🚀 Öne Çıkan Özellikler")
         st.markdown(
             "- **Manipülasyonsuz eğitim:** Sadece mekanizma öğretir.\n"
-            "- **Python & API destekli:** Canlı döviz, hisse verileri ve simülasyonlar.\n"
+            "- **Python destekli:** `yfinance` ile canlı döviz ve hisse verileri.\n"
             "- **Zengin Kaynaklar:** Seçkin kitaplar ve YouTube eğitim rehberleri."
         )
 
@@ -211,7 +212,7 @@ if st.session_state.secim == "🏠 Ana Sayfa":
             st.markdown("#### 📈 Piyasa")
             st.caption("Canlı döviz & hisse.")
             if st.button("Keşfet", key="btn_piy", use_container_width=True):
-                st.session_state.hedef_sayfa = "📈 Canlı Piyasa & API"
+                st.session_state.hedef_sayfa = "📈 Canlı Piyasa"
                 st.rerun()
 
     with kutu4:
@@ -308,20 +309,14 @@ elif st.session_state.secim == "📊 YüzGözAnaliz":
     )
 
 # ----------------------------------------------------
-# CANLI PİYASA & API KÖŞESİ
+# CANLI PİYASA
 # ----------------------------------------------------
-elif st.session_state.secim == "📈 Canlı Piyasa & API":
-    st.header("📈 Canlı Piyasa & Veri Monitörü")
-    st.write("Python (`yfinance`) ve harici API entegrasyonlarıyla küresel piyasalardan anlık veriler.")
-
-    with st.expander("🔑 API Anahtarı Yönetimi (Geliştirici Paneli)"):
-        st.write("Harici finans servisleri (örn. Alpha Vantage, ExchangeRate API) kullanmak istersen anahtarını buraya girebilirsin.")
-        api_key_input = st.text_input("API Key / Token Giriniz", type="password")
-        if api_key_input:
-            st.success("API Anahtarı sisteme güvenli şekilde tanımlandı!")
+elif st.session_state.secim == "📈 Canlı Piyasa":
+    st.header("📈 Canlı Piyasa Monitörü")
+    st.write("Python (`yfinance`) kütüphanesiyle küresel piyasalardan ve borsadan anlık veriler.")
 
     st.markdown("### 💱 Döviz Kurları ve Hisse Senedi İzleme")
-    st.info("Aşağıdaki veriler piyasa kaynaklarından canlı olarak çekilmektedir.")
+    st.info("Aşağıdaki veriler Yahoo Finance üzerinden canlı olarak çekilmektedir.")
 
     try:
         import yfinance as yf
