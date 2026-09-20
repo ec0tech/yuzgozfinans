@@ -55,19 +55,30 @@ st.info(
 st.markdown("---")
 
 # ----------------------------------------------------
+# SAYFA SEÇİMİ (session_state ile hafızada tutulur)
+# ----------------------------------------------------
+SAYFALAR = ["🏠 Ana Sayfa", "📚 Finans 101", "🔎 Gündem Süzgeci", "📊 YüzGözAnaliz"]
+
+if "secim" not in st.session_state:
+    st.session_state.secim = "🏠 Ana Sayfa"
+
+# ----------------------------------------------------
 # YAN MENÜ (SIDEBAR)
 # ----------------------------------------------------
 st.sidebar.image("https://img.icons8.com/fluency/96/stocks-growth.png", width=80)
 st.sidebar.title("Navigasyon")
-secim = st.sidebar.radio(
+secim_sidebar = st.sidebar.radio(
     "Gitmek istediğin alanı seç:",
-    ["🏠 Ana Sayfa", "📚 Finans 101", "🔎 Gündem Süzgeci", "📊 YüzGözAnaliz"]
+    SAYFALAR,
+    index=SAYFALAR.index(st.session_state.secim),
+    key="sidebar_secim"
 )
+st.session_state.secim = secim_sidebar
 
 # ----------------------------------------------------
 # ANA SAYFA
 # ----------------------------------------------------
-if secim == "🏠 Ana Sayfa":
+if st.session_state.secim == "🏠 Ana Sayfa":
     col1, col2 = st.columns(2)
 
     with col1:
@@ -85,10 +96,39 @@ if secim == "🏠 Ana Sayfa":
             "- **YüzGözAnaliz:** İnteraktif simülasyonlar ve hesaplayıcılar."
         )
 
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("### 🧭 Nereden başlamak istersin?")
+
+    kutu1, kutu2, kutu3 = st.columns(3)
+
+    with kutu1:
+        with st.container(border=True):
+            st.markdown("#### 📚 Finans 101")
+            st.caption("Temel kavramlar, sade anlatım.")
+            if st.button("Keşfet", key="btn_finans101", use_container_width=True):
+                st.session_state.secim = "📚 Finans 101"
+                st.rerun()
+
+    with kutu2:
+        with st.container(border=True):
+            st.markdown("#### 🔎 Gündem Süzgeci")
+            st.caption("Dünya ekonomisi, mekanizma odaklı.")
+            if st.button("Keşfet", key="btn_gundem", use_container_width=True):
+                st.session_state.secim = "🔎 Gündem Süzgeci"
+                st.rerun()
+
+    with kutu3:
+        with st.container(border=True):
+            st.markdown("#### 📊 YüzGözAnaliz")
+            st.caption("İnteraktif hesaplayıcılar.")
+            if st.button("Keşfet", key="btn_analiz", use_container_width=True):
+                st.session_state.secim = "📊 YüzGözAnaliz"
+                st.rerun()
+
 # ----------------------------------------------------
 # FİNANS 101
 # ----------------------------------------------------
-elif secim == "📚 Finans 101":
+elif st.session_state.secim == "📚 Finans 101":
     st.header("📚 Finans 101: Temel Kavramlar")
     st.write("Ekonominin temel taşlarını en sade, anlaşılır dille keşfet.")
 
@@ -113,7 +153,7 @@ elif secim == "📚 Finans 101":
 # ----------------------------------------------------
 # GÜNDEM SÜZGECİ
 # ----------------------------------------------------
-elif secim == "🔎 Gündem Süzgeci":
+elif st.session_state.secim == "🔎 Gündem Süzgeci":
     st.header("🔎 Gündem Süzgeci: Dünya ve Ekonomi")
     st.write(
         "Küresel haberleri olduğu gibi değil, mekanizmasını süzerek aktarıyoruz — "
@@ -133,7 +173,7 @@ elif secim == "🔎 Gündem Süzgeci":
 # ----------------------------------------------------
 # YÜZGÖZANALİZ
 # ----------------------------------------------------
-elif secim == "📊 YüzGözAnaliz":
+elif st.session_state.secim == "📊 YüzGözAnaliz":
     st.header("📊 YüzGözAnaliz: Simülasyon Merkezi")
     st.write("Python altyapısıyla güçlendirilmiş interaktif karar destek araçları.")
 
@@ -178,3 +218,4 @@ st.markdown(
     "Portfolyo Projesidir 🚀</p>",
     unsafe_allow_html=True
 )
+
