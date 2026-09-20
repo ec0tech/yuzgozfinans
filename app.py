@@ -67,13 +67,11 @@ if "secim" not in st.session_state:
 # ----------------------------------------------------
 st.sidebar.image("https://img.icons8.com/fluency/96/stocks-growth.png", width=80)
 st.sidebar.title("Navigasyon")
-secim_sidebar = st.sidebar.radio(
+st.sidebar.radio(
     "Gitmek istediğin alanı seç:",
     SAYFALAR,
-    index=SAYFALAR.index(st.session_state.secim),
-    key="sidebar_secim"
+    key="secim"
 )
-st.session_state.secim = secim_sidebar
 
 # ----------------------------------------------------
 # ANA SAYFA
@@ -97,14 +95,14 @@ if st.session_state.secim == "🏠 Ana Sayfa":
         )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 🧭 Nereden başlamak istersin?")
+    st.markdown("### 🧭 Hadi Başlayalım!")
 
     kutu1, kutu2, kutu3 = st.columns(3)
 
     with kutu1:
         with st.container(border=True):
             st.markdown("#### 📚 Finans 101")
-            st.caption("Temel kavramlar, sade anlatım.")
+            st.caption("Temel finans kavramları, sade anlatım.")
             if st.button("Keşfet", key="btn_finans101", use_container_width=True):
                 st.session_state.secim = "📚 Finans 101"
                 st.rerun()
@@ -112,7 +110,7 @@ if st.session_state.secim == "🏠 Ana Sayfa":
     with kutu2:
         with st.container(border=True):
             st.markdown("#### 🔎 Gündem Süzgeci")
-            st.caption("Dünya ekonomisi, mekanizma odaklı.")
+            st.caption("Dünya ekonomisi, haftalık gündemin nabzı.")
             if st.button("Keşfet", key="btn_gundem", use_container_width=True):
                 st.session_state.secim = "🔎 Gündem Süzgeci"
                 st.rerun()
@@ -157,7 +155,7 @@ elif st.session_state.secim == "🔎 Gündem Süzgeci":
     st.header("🔎 Gündem Süzgeci: Dünya ve Ekonomi")
     st.write(
         "Küresel haberleri olduğu gibi değil, mekanizmasını süzerek aktarıyoruz — "
-        "tavsiye vermeden, sadece anlatarak."
+        "tavsiye vermiyoruz, sadece anlatıyoruz."
     )
 
     st.markdown("""
@@ -218,4 +216,3 @@ st.markdown(
     "Portfolyo Projesidir 🚀</p>",
     unsafe_allow_html=True
 )
-
