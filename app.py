@@ -62,6 +62,10 @@ SAYFALAR = ["🏠 Ana Sayfa", "📚 Finans 101", "🔎 Gündem Süzgeci", "📊 
 if "secim" not in st.session_state:
     st.session_state.secim = "🏠 Ana Sayfa"
 
+# Kutucuklardan gelen bekleyen geçiş varsa, sidebar oluşturulmadan önce uygula
+if "hedef_sayfa" in st.session_state:
+    st.session_state.secim = st.session_state.pop("hedef_sayfa")
+
 # ----------------------------------------------------
 # YAN MENÜ (SIDEBAR)
 # ----------------------------------------------------
@@ -95,24 +99,24 @@ if st.session_state.secim == "🏠 Ana Sayfa":
         )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 🧭 Hadi Başlayalım!")
+    st.markdown("### 🧭 Nereden başlamak istersin?")
 
     kutu1, kutu2, kutu3 = st.columns(3)
 
     with kutu1:
         with st.container(border=True):
             st.markdown("#### 📚 Finans 101")
-            st.caption("Temel finans kavramları, sade anlatım.")
+            st.caption("Temel kavramlar, sade anlatım.")
             if st.button("Keşfet", key="btn_finans101", use_container_width=True):
-                st.session_state.secim = "📚 Finans 101"
+                st.session_state.hedef_sayfa = "📚 Finans 101"
                 st.rerun()
 
     with kutu2:
         with st.container(border=True):
             st.markdown("#### 🔎 Gündem Süzgeci")
-            st.caption("Dünya ekonomisi, haftalık gündemin nabzı.")
+            st.caption("Dünya ekonomisi, mekanizma odaklı.")
             if st.button("Keşfet", key="btn_gundem", use_container_width=True):
-                st.session_state.secim = "🔎 Gündem Süzgeci"
+                st.session_state.hedef_sayfa = "🔎 Gündem Süzgeci"
                 st.rerun()
 
     with kutu3:
@@ -120,7 +124,7 @@ if st.session_state.secim == "🏠 Ana Sayfa":
             st.markdown("#### 📊 YüzGözAnaliz")
             st.caption("İnteraktif hesaplayıcılar.")
             if st.button("Keşfet", key="btn_analiz", use_container_width=True):
-                st.session_state.secim = "📊 YüzGözAnaliz"
+                st.session_state.hedef_sayfa = "📊 YüzGözAnaliz"
                 st.rerun()
 
 # ----------------------------------------------------
@@ -155,7 +159,7 @@ elif st.session_state.secim == "🔎 Gündem Süzgeci":
     st.header("🔎 Gündem Süzgeci: Dünya ve Ekonomi")
     st.write(
         "Küresel haberleri olduğu gibi değil, mekanizmasını süzerek aktarıyoruz — "
-        "tavsiye vermiyoruz, sadece anlatıyoruz."
+        "tavsiye vermeden, sadece anlatarak."
     )
 
     st.markdown("""
@@ -216,3 +220,4 @@ st.markdown(
     "Portfolyo Projesidir 🚀</p>",
     unsafe_allow_html=True
 )
+
