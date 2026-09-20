@@ -11,50 +11,6 @@ st.set_page_config(
 )
 
 # ----------------------------------------------------
-# ÖZEL CSS
-# ----------------------------------------------------
-st.markdown("""
-    <style>
-    .stApp {
-        background-color: #0E1117;
-    }
-    .metric-card {
-        background-color: #1E2229;
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid #2D3748;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 12px;
-    }
-    .metric-card h4 {
-        margin-top: 0;
-    }
-    h1, h2, h3 {
-        color: #FAFAFA !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# ----------------------------------------------------
-# ÜST BANNER / BAŞLIK ALANI
-# ----------------------------------------------------
-st.title("👁️ YüzGözFinans")
-st.markdown("##### *Parana YüzGöz Ol*")
-st.markdown(
-    "*Yatırım tavsiyesi değil; dünya gündeminin mekanizması, finansal okuryazarlık "
-    "ve veri analitiği.*"
-)
-
-st.info(
-    "📌 **Bu site gelişim aşamasındadır.** Şu an bir başlangıç (MVP) sürümünü "
-    "görüntülüyorsunuz. Önümüzdeki dönemde yeni yazılar, analizler ve araçlar "
-    "eklenmeye devam edecek. Sitedeki hiçbir içerik yatırım tavsiyesi değildir; "
-    "amaç yalnızca eğitim ve farkındalıktır."
-)
-
-st.markdown("---")
-
-# ----------------------------------------------------
 # SAYFA SEÇİMİ (session_state ile hafızada tutulur)
 # ----------------------------------------------------
 SAYFALAR = ["🏠 Ana Sayfa", "📚 Finans 101", "🔎 Gündem Süzgeci", "📊 YüzGözAnaliz"]
@@ -67,15 +23,136 @@ if "hedef_sayfa" in st.session_state:
     st.session_state.secim = st.session_state.pop("hedef_sayfa")
 
 # ----------------------------------------------------
-# YAN MENÜ (SIDEBAR)
+# TEMA SEÇİCİ (yeşil / mavi vurgu rengini canlı karşılaştırmak için)
 # ----------------------------------------------------
+TEMALAR = {
+    "Yeşil (GitHub tarzı)": {
+        "buton_grad": "linear-gradient(90deg, #238636 0%, #2ea043 100%)",
+        "hover_border": "#3fb950",
+        "hero_grad": "linear-gradient(135deg, #0d1117 0%, #123524 60%, #1b4332 100%)",
+        "rozet_bg": "rgba(46, 160, 67, 0.15)",
+        "rozet_text": "#3fb950",
+    },
+    "Mavi (marka rengi)": {
+        "buton_grad": "linear-gradient(90deg, #1f6feb 0%, #388bfd 100%)",
+        "hover_border": "#58a6ff",
+        "hero_grad": "linear-gradient(135deg, #0d1117 0%, #0f2a4a 60%, #123a63 100%)",
+        "rozet_bg": "rgba(56, 139, 253, 0.15)",
+        "rozet_text": "#58a6ff",
+    },
+}
+
 st.sidebar.image("https://img.icons8.com/fluency/96/stocks-growth.png", width=80)
 st.sidebar.title("Navigasyon")
-st.sidebar.radio(
-    "Gitmek istediğin alanı seç:",
-    SAYFALAR,
-    key="secim"
+st.sidebar.radio("Gitmek istediğin alanı seç:", SAYFALAR, key="secim")
+
+st.sidebar.markdown("---")
+tema_secim = st.sidebar.selectbox("🎨 Vurgu rengi (deneme)", list(TEMALAR.keys()))
+T = TEMALAR[tema_secim]
+
+# ----------------------------------------------------
+# ÖZEL CSS
+# ----------------------------------------------------
+st.markdown(f"""
+    <style>
+    .stApp {{
+        background-color: #0b0f19;
+        color: #e2e8f0;
+    }}
+
+    /* Modern kart tasarımı */
+    .metric-card {{
+        background: linear-gradient(135.6deg, #161b22 0%, #0d1117 100%);
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid #30363d;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        margin-bottom: 16px;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }}
+    .metric-card:hover {{
+        border-color: {T['hover_border']};
+        transform: translateY(-2px);
+    }}
+    .metric-card h4 {{
+        margin-top: 0;
+    }}
+
+    /* Hero banner */
+    .hero-banner {{
+        background: {T['hero_grad']};
+        border-radius: 20px;
+        padding: 48px 40px;
+        margin-bottom: 24px;
+        border: 1px solid #30363d;
+        text-align: center;
+    }}
+    .hero-rozet {{
+        display: inline-block;
+        background: {T['rozet_bg']};
+        color: {T['rozet_text']};
+        font-size: 13px;
+        font-weight: 600;
+        padding: 4px 14px;
+        border-radius: 999px;
+        margin-bottom: 16px;
+    }}
+    .hero-baslik {{
+        font-size: 40px;
+        font-weight: 700;
+        color: #f0f6fc;
+        margin: 0 0 8px;
+    }}
+    .hero-alt {{
+        font-size: 16px;
+        color: #9198a1;
+        max-width: 560px;
+        margin: 0 auto;
+    }}
+
+    h1, h2, h3 {{
+        color: #f0f6fc !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }}
+
+    /* Butonlar */
+    .stButton>button {{
+        background: {T['buton_grad']};
+        color: white;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        transition: opacity 0.2s;
+    }}
+    .stButton>button:hover {{
+        opacity: 0.9;
+        border: none;
+        color: white;
+    }}
+    </style>
+""", unsafe_allow_html=True)
+
+# ----------------------------------------------------
+# HERO BANNER
+# ----------------------------------------------------
+st.markdown("""
+    <div class="hero-banner">
+        <div class="hero-rozet">👁️ Tavsiye değil, anlatı</div>
+        <p class="hero-baslik">Parana YüzGöz Ol</p>
+        <p class="hero-alt">Dünya gündeminin mekanizması, finansal okuryazarlık ve
+        veri analitiği — sade, tarafsız ve öğretici bir dille.</p>
+    </div>
+""", unsafe_allow_html=True)
+
+st.info(
+    "📌 **Bu site gelişim aşamasındadır.** Şu an bir başlangıç (MVP) sürümünü "
+    "görüntülüyorsunuz. Önümüzdeki dönemde yeni yazılar, analizler ve araçlar "
+    "eklenmeye devam edecek. Sitedeki hiçbir içerik yatırım tavsiyesi değildir; "
+    "amaç yalnızca eğitim ve farkındalıktır."
 )
+
+st.markdown("---")
 
 # ----------------------------------------------------
 # ANA SAYFA
@@ -179,32 +256,33 @@ elif st.session_state.secim == "📊 YüzGözAnaliz":
     st.header("📊 YüzGözAnaliz: Simülasyon Merkezi")
     st.write("Python altyapısıyla güçlendirilmiş interaktif karar destek araçları.")
 
-    col_a, col_b, col_c = st.columns(3)
-    with col_a:
-        enflasyon = st.slider("Yıllık Tahmini Enflasyon Oranı (%)", 10, 100, 40)
-    with col_b:
-        para = st.number_input("Başlangıç Tutarı (TL)", value=10000)
-    with col_c:
-        yil = st.slider("Süre (Yıl)", 1, 10, 5)
+    with st.container(border=True):
+        col_a, col_b, col_c = st.columns(3)
+        with col_a:
+            enflasyon = st.slider("Yıllık Tahmini Enflasyon Oranı (%)", 10, 100, 40)
+        with col_b:
+            para = st.number_input("Başlangıç Tutarı (TL)", value=10000)
+        with col_c:
+            yil = st.slider("Süre (Yıl)", 1, 10, 5)
 
-    veri = []
-    for y in range(0, yil + 1):
-        deger = para / ((1 + enflasyon / 100) ** y)
-        veri.append({"Yıl": y, "Reel Alım Gücü (TL)": round(deger, 2)})
+        veri = []
+        for y in range(0, yil + 1):
+            deger = para / ((1 + enflasyon / 100) ** y)
+            veri.append({"Yıl": y, "Reel Alım Gücü (TL)": round(deger, 2)})
 
-    df = pd.DataFrame(veri)
-    son_deger = df.iloc[-1]["Reel Alım Gücü (TL)"]
-    kayip_yuzde = ((para - son_deger) / para) * 100 if para > 0 else 0
+        df = pd.DataFrame(veri)
+        son_deger = df.iloc[-1]["Reel Alım Gücü (TL)"]
+        kayip_yuzde = ((para - son_deger) / para) * 100 if para > 0 else 0
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.metric(
-        label=f"Enflasyon Karşısında {yil} Yıl Sonraki Alım Gücü",
-        value=f"{son_deger:,.2f} TL",
-        delta=f"-%{kayip_yuzde:.1f} Kayıp",
-        delta_color="inverse"
-    )
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.metric(
+            label=f"Enflasyon Karşısında {yil} Yıl Sonraki Alım Gücü",
+            value=f"{son_deger:,.2f} TL",
+            delta=f"-%{kayip_yuzde:.1f} Kayıp",
+            delta_color="inverse"
+        )
 
-    st.line_chart(df.set_index("Yıl"))
+        st.line_chart(df.set_index("Yıl"))
 
     st.caption(
         "⚠️ Bu hesaplama basitleştirilmiştir; gerçek enflasyon oranları yıldan "
@@ -220,4 +298,3 @@ st.markdown(
     "Portfolyo Projesidir 🚀</p>",
     unsafe_allow_html=True
 )
-
